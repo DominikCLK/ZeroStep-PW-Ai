@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "show-report": "npx playwright show-report"
+  },
   "repository": {
     "type": "git",
     "url": "git@prywatny.github.com:DominikCLK/ZeroStep-PW-Ai.git"
@@ -13,6 +15,11 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.49.1",
-    "@types/node": "^22.10.7"
+    "@types/dotenv": "^8.2.3",
+    "@types/node": "^22.10.7",
+    "@zerostep/playwright": "^0.1.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
   }
 }

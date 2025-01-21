@@ -1,18 +1,21 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
+import { ai } from '@zerostep/playwright'
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
-
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+test.describe("Verification of sending the contact form", () => {
+  test("Fill contact form with data and send form", async ({ page }) => {
+    const aiArgs = { page, test }
+    
+    await page.goto('contact');
+    
+    await ai('Find and fill the input field labeled "First Name" with "John Smith"', aiArgs);
+    await ai('Find and fill the input field labeled "Last Name" with "test@example.com"', aiArgs);
+    await ai('Find and fill the input field labeled "Email address" with "test@example.com"', aiArgs);
+    await ai('Find and select from the dropdown menu labeled "Subject" the first available option', aiArgs);
+    await ai('Find the textarea labeled "Message" and type test message that contains exactly fifty characters', aiArgs);
+    
+    await ai('Find and click the button labeled "Send"', aiArgs);
+    
+    const alert = await ai('Find the success message alert that appears after form submission', aiArgs);
+    await expect(alert).toContainText('Thanks for your message! We will contact you shortly.');
+  });
 });

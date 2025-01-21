@@ -1,26 +1,29 @@
 import { defineConfig, devices } from '@playwright/test';
-
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+import { BASE_URL } from './config/env.config';
 
 export default defineConfig({
   testDir: './tests',
+  timeout: 60_000,
+  expect: { timeout: 10_000 },
   fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  retries: 1,
+  workers: process.env.CI ? 6 : undefined,
+
+  reporter: [
+    ['html'],
+    ['github'],
+    ['json', { outputFile: './playwright-report/results.json' }],
+    ['junit', { outputFile: './playwright-report/results.xml' }],
+  ],
+
   use: {
-    // baseURL: 'http://127.0.0.1:3000',
-    trace: 'on-first-retry',
+    baseURL: BASE_URL,
+    actionTimeout: 0,
+    trace: 'retain-on-failure',
+    video: 'retain-on-failure',
+    screenshot: 'only-on-failure',
   },
 
-  /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
